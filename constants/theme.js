@@ -34,7 +34,7 @@ export const getTheme = (isDark = true) => ({
   textMuted: isDark ? '#9EA4B0' : '#64748B',    // --muted-foreground: oklch(0.68 0.01 250)
 
   // Gold Accents
-  gold: '#E0A93B',                              // --gold / --primary: oklch(0.79 0.12 84)
+  gold: '#CF9D78',                              // --gold / --primary: oklch(0.79 0.12 84)
   goldMuted: isDark ? '#A3782C' : '#B48828',    // --gold-muted: oklch(0.62 0.08 84)
   goldForeground: '#2E1E0A',                   // --primary-foreground: oklch(0.2 0.02 84)
   goldBadgeBg: isDark ? 'rgba(224, 169, 59, 0.12)' : 'rgba(224, 169, 59, 0.15)',

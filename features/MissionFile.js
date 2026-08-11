@@ -9,7 +9,8 @@ export function MissionFile({ mission, index, onBypass, cleared }) {
   const { theme } = useTheme();
 
   return (
-    <View style={[styles.missionItem, { backgroundColor: theme.cardBg, borderColor: theme.border, borderRadius: theme.radius.xl }, cleared && styles.missionCleared]}>
+    <View style={[styles.missionItem, { 
+      backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: theme.border, borderRadius: theme.radius.xl }, cleared && styles.missionCleared]}>
       <View style={styles.missionTop}>
         <View style={[styles.missionIconBox, { backgroundColor: theme.bg, borderRadius: theme.radius.md }]}>
           <MaterialIcons name="fingerprint" size={22} color={theme.gold} />

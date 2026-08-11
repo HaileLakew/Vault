@@ -21,7 +21,7 @@ export function PlanScreen({
   const { theme } = useTheme();
 
   return (
-    <View style={[styles.planView, { backgroundColor: theme.bg }]}>
+    <View style={styles.planView}>
       <TopBar balance={balance} />
       <View style={styles.vaultWrapper}>
         <VaultStatusCard
@@ -32,6 +32,7 @@ export function PlanScreen({
           isUnlocked={isUnlockedState}
         />
       </View>
+      
       <TimedInfiltration onStartTimer={onStartTimer} onCancelTimer={onCancelTimer} isTimerActive={isTimerActive} />
       <View style={styles.sectionContainer}>
         <View style={styles.missionBoardHeader}>

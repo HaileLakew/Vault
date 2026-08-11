@@ -13,6 +13,8 @@ import { TakeScreen } from './screens/TakeScreen';
 import { BottomNav } from './components/BottomNav';
 import { NfcModal } from './components/NFCModal';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
 function VaultAppContent() {
   const { theme, isDarkMode, toggleTheme } = useTheme();
   const [tab, setTab] = useState('plan');
@@ -48,9 +50,22 @@ function VaultAppContent() {
   const isUnlockedState = isVaultUnlocked || activeLayers === 0;
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.bg }]} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={[styles.safeArea]} edges={['top', 'left', 'right']}>
       <StatusBar barStyle={theme.statusBarStyle} />
-      <View style={[styles.container, { backgroundColor: theme.bg }]}>
+      <View style={[styles.container]}>
+      <LinearGradient
+        colors={
+          isDarkMode
+            ? ['#0C1519', '#191B20', '#121217']
+            : ['#E5E7EB', '#F1F3F5', '#F8FAFC']
+        }
+        locations={[0, 0.245, 1]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={StyleSheet.absoluteFillObject}
+        pointerEvents="none"
+      />
+
         <ScrollView
           style={styles.mainScroll}
           contentContainerStyle={styles.scrollContent}

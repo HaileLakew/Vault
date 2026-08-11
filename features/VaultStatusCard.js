@@ -3,7 +3,11 @@ import { StyleSheet, Text, View, Platform } from 'react-native';
 import Svg, { Circle, G, Defs, Filter, FeGaussianBlur, FeMerge, FeMergeNode } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
+
+import { BlurView } from 'expo-blur';
+
 import { useTheme } from '../context/ThemeContext';
+import { GlassCard } from '../components/GlassCard';
 
 export function VaultStatusCard({
   active = 3,
@@ -30,160 +34,145 @@ export function VaultStatusCard({
   const iconName = isTimerActive ? 'clock' : isUnlocked ? 'unlock' : 'lock';
 
   return (
-    <View
-      style={[
-        styles.vaultCard,
-        {
-          backgroundColor: theme.cardBg,
-          borderColor: theme.border,
-          borderRadius: theme.radius['3xl'],
-        },
-      ]}
-    >
-      {/* 1. BACKGROUND VIGNETTE GRADIENT */}
-      <LinearGradient
-        colors={['rgba(226, 169, 58, 0.08)', 'transparent']}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 0.65 }}
-        style={StyleSheet.absoluteFillObject}
-        pointerEvents="none"
-      />
+    <View>
 
-      <View style={styles.cardContent}>
-        <Text
-          style={[
-            styles.vaultCardLabel,
-            { color: isUnlocked ? theme.green : theme.textMuted },
-          ]}
-        >
-          {isTimerActive
-            ? '/// INFILTRATION IN PROGRESS'
-            : isUnlocked
-            ? '/// ACCESS GRANTED — PHONE UNLOCKED'
-            : 'VAULT LOCK STATUS'}
-        </Text>
-
-        {/* 2. 180x180 SVG DIAL WITH NEON GLOW ARC */}
-        <View style={styles.dialWrapper}>
-          <Svg width={180} height={180} viewBox="0 0 180 180">
-            <Defs>
-              <Filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <FeGaussianBlur stdDeviation="4" result="coloredBlur" />
-                <FeMerge>
-                  <FeMergeNode in="coloredBlur" />
-                  <FeMergeNode in="coloredBlur" />
-                  <FeMergeNode in="SourceGraphic" />
-                </FeMerge>
-              </Filter>
-            </Defs>
-
-            <G rotation="-90" origin="90, 90">
-              {/* Static Background Track */}
-              <Circle
-                cx="90"
-                cy="90"
-                r={radius}
-                fill="none"
-                stroke={theme.border}
-                strokeWidth="6"
-              />
-
-              {/* Diffused Ambient Glow Halo Layer */}
-              <Circle
-                cx="90"
-                cy="90"
-                r={radius}
-                fill="none"
-                stroke={accentColor}
-                strokeWidth="12"
-                opacity={0.25}
-                strokeDasharray={[dash, circumference]}
-                strokeLinecap="round"
-              />
-
-              {/* Primary Arc with SVG Filter Glow */}
-              <Circle
-                cx="90"
-                cy="90"
-                r={radius}
-                fill="none"
-                stroke={accentColor}
-                strokeWidth="6"
-                strokeDasharray={[dash, circumference]}
-                strokeLinecap="round"
-                filter="url(#goldGlow)"
-              />
-            </G>
-          </Svg>
-
-          {/* 3. VAULT DOOR WITH GRADIENT */}
-          <LinearGradient
-            colors={[theme.cardHeaderBg, theme.bg]}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
+    <GlassCard>
+        <View style={styles.cardContent}>
+          <Text
             style={[
-              styles.doorOuter,
-              {
-                borderColor: isUnlocked
-                  ? 'rgba(16, 185, 129, 0.25)'
-                  : 'rgba(226, 169, 58, 0.25)',
-              },
+              styles.vaultCardLabel,
+              { color: isUnlocked ? theme.green : theme.textMuted },
             ]}
           >
-            {/* Inner Lock Core */}
-            <View
+            {isTimerActive
+              ? '/// INFILTRATION IN PROGRESS'
+              : isUnlocked
+              ? '/// ACCESS GRANTED — PHONE UNLOCKED'
+              : 'VAULT LOCK STATUS'}
+          </Text>
+
+          {/* 2. 180x180 SVG DIAL WITH NEON GLOW ARC */}
+          <View style={styles.dialWrapper}>
+            <Svg width={180} height={180} viewBox="0 0 180 180">
+              <Defs>
+                <Filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <FeGaussianBlur stdDeviation="4" result="coloredBlur" />
+                  <FeMerge>
+                    <FeMergeNode in="coloredBlur" />
+                    <FeMergeNode in="coloredBlur" />
+                    <FeMergeNode in="SourceGraphic" />
+                  </FeMerge>
+                </Filter>
+              </Defs>
+
+              <G rotation="-90" origin="90, 90">
+                {/* Static Background Track */}
+                <Circle
+                  cx="90"
+                  cy="90"
+                  r={radius}
+                  fill="none"
+                  stroke={theme.border}
+                  strokeWidth="6"
+                />
+
+                {/* Diffused Ambient Glow Halo Layer */}
+                <Circle
+                  cx="90"
+                  cy="90"
+                  r={radius}
+                  fill="none"
+                  stroke={accentColor}
+                  strokeWidth="12"
+                  opacity={0.25}
+                  strokeDasharray={[dash, circumference]}
+                  strokeLinecap="round"
+                />
+
+                {/* Primary Arc with SVG Filter Glow */}
+                <Circle
+                  cx="90"
+                  cy="90"
+                  r={radius}
+                  fill="none"
+                  stroke={accentColor}
+                  strokeWidth="6"
+                  strokeDasharray={[dash, circumference]}
+                  strokeLinecap="round"
+                  filter="url(#goldGlow)"
+                />
+              </G>
+            </Svg>
+
+            {/* 3. VAULT DOOR WITH GRADIENT */}
+            <LinearGradient
+              colors={[theme.cardHeaderBg, theme.bg]}
+              start={{ x: 0.5, y: 0 }}
+              end={{ x: 0.5, y: 1 }}
               style={[
-                styles.doorInner,
+                styles.doorOuter,
                 {
                   borderColor: isUnlocked
-                    ? 'rgba(16, 185, 129, 0.20)'
-                    : 'rgba(226, 169, 58, 0.20)',
-                  backgroundColor: isUnlocked
-                    ? 'rgba(16, 185, 129, 0.10)'
-                    : 'rgba(25, 28, 36, 0.60)',
+                    ? 'rgba(16, 185, 129, 0.25)'
+                    : 'rgba(226, 169, 58, 0.25)',
                 },
               ]}
             >
-              <Feather name={iconName} size={32} color={accentColor} />
-            </View>
-          </LinearGradient>
-        </View>
+              {/* Inner Lock Core */}
+              <View
+                style={[
+                  styles.doorInner,
+                  {
+                    borderColor: isUnlocked
+                      ? 'rgba(16, 185, 129, 0.20)'
+                      : 'rgba(226, 169, 58, 0.20)',
+                    backgroundColor: isUnlocked
+                      ? 'rgba(16, 185, 129, 0.10)'
+                      : 'rgba(25, 28, 36, 0.60)',
+                  },
+                ]}
+              >
+                <Feather name={iconName} size={32} color={accentColor} />
+              </View>
+            </LinearGradient>
+          </View>
 
-        {/* 4. SERIF NUMBERS & CAPTION */}
-        {isTimerActive ? (
-          <View style={styles.statusDisplay}>
-            <Text style={[styles.timerCountdownText, { color: theme.gold }]}>
-              {formatTime(timerSeconds)}
-            </Text>
-            <Text style={[styles.vaultDesc, { color: theme.textMuted }]}>
-              TIME REMAINING
-            </Text>
-          </View>
-        ) : isUnlocked ? (
-          <View style={styles.statusDisplay}>
-            <Text style={[styles.unlockedTitle, { color: theme.green }]}>
-              UNLOCKED
-            </Text>
-            <Text style={[styles.vaultDesc, { color: theme.green }]}>
-              FULL ACCESS GRANTED
-            </Text>
-          </View>
-        ) : (
-          <>
-            <View style={styles.vaultNumbers}>
-              <Text style={[styles.serifNumber, { color: theme.textPrimary }]}>
-                {active}
+          {/* 4. SERIF NUMBERS & CAPTION */}
+          {isTimerActive ? (
+            <View style={styles.statusDisplay}>
+              <Text style={[styles.timerCountdownText, { color: theme.gold }]}>
+                {formatTime(timerSeconds)}
               </Text>
-              <Text style={[styles.vaultNumberTotal, { color: theme.textMuted }]}>
-                of {total}
+              <Text style={[styles.vaultDesc, { color: theme.textMuted }]}>
+                TIME REMAINING
               </Text>
             </View>
-            <Text style={[styles.vaultDesc, { color: theme.gold }]}>
-              SECURITY LAYERS ACTIVE
-            </Text>
-          </>
-        )}
-      </View>
+          ) : isUnlocked ? (
+            <View style={styles.statusDisplay}>
+              <Text style={[styles.unlockedTitle, { color: theme.green }]}>
+                UNLOCKED
+              </Text>
+              <Text style={[styles.vaultDesc, { color: theme.green }]}>
+                FULL ACCESS GRANTED
+              </Text>
+            </View>
+          ) : (
+            <>
+              <View style={styles.vaultNumbers}>
+                <Text style={[styles.serifNumber, { color: theme.textPrimary }]}>
+                  {active}
+                </Text>
+                <Text style={[styles.vaultNumberTotal, { color: theme.textMuted }]}>
+                  of {total}
+                </Text>
+              </View>
+              <Text style={[styles.vaultDesc, { color: theme.gold }]}>
+                SECURITY LAYERS ACTIVE
+              </Text>
+            </>
+          )}
+        </View>
+      </GlassCard>
     </View>
   );
 }
@@ -199,6 +188,7 @@ const styles = StyleSheet.create({
   cardContent: {
     alignItems: 'center',
     position: 'relative',
+    padding: 10,
     zIndex: 1,
   },
   vaultCardLabel: {
