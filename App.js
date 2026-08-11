@@ -54,11 +54,7 @@ function VaultAppContent() {
       <StatusBar barStyle={theme.statusBarStyle} />
       <View style={[styles.container]}>
       <LinearGradient
-        colors={
-          isDarkMode
-            ? ['#0C1519', '#191B20', '#121217']
-            : ['#E5E7EB', '#F1F3F5', '#F8FAFC']
-        }
+        colors={theme.backgroundGradient}
         locations={[0, 0.245, 1]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}

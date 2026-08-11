@@ -2,9 +2,44 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
-export function Button({ onPress, children, variant = 'default', disabled = false, style }) {
+// TODO: A subtle metal sheen or shadow?
+
+export function Button({ 
+  onPress, 
+  children, 
+  variant = 'default', // 'default', 'secondary', 'outline'
+  disabled = false, 
+  style,
+  textStyle
+}) {
   const { theme } = useTheme();
-  const isDefault = variant === 'default';
+
+  // Determine styles based on variant
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'secondary':
+        return {
+          backgroundColor: theme.btnSecondaryBg,
+          borderColor: theme.border,
+          textColor: theme.btnSecondaryText,
+        };
+      case 'outline':
+        return {
+          backgroundColor: 'transparent',
+          borderColor: theme.gold,
+          textColor: theme.gold,
+        };
+      case 'default':
+      default:
+        return {
+          backgroundColor: theme.gold,
+          borderColor: 'transparent',
+          textColor: theme.goldForeground,
+        };
+    }
+  };
+
+  const variantStyle = getVariantStyles();
 
   return (
     <TouchableOpacity
@@ -14,8 +49,8 @@ export function Button({ onPress, children, variant = 'default', disabled = fals
       style={[
         styles.baseButton,
         {
-          backgroundColor: isDefault ? theme.gold : theme.btnSecondaryBg,
-          borderColor: isDefault ? 'transparent' : theme.border,
+          backgroundColor: variantStyle.backgroundColor,
+          borderColor: variantStyle.borderColor,
           borderRadius: theme.radius.lg,
         },
         disabled && styles.disabled,
@@ -26,8 +61,8 @@ export function Button({ onPress, children, variant = 'default', disabled = fals
         <Text
           style={[
             styles.baseText,
-            { color: isDefault ? theme.goldForeground : theme.btnSecondaryText },
-            disabled && { color: theme.textMuted },
+            { color: disabled ? theme.textMuted : variantStyle.textColor },
+            textStyle,
           ]}
         >
           {children}
@@ -40,7 +75,22 @@ export function Button({ onPress, children, variant = 'default', disabled = fals
 }
 
 const styles = StyleSheet.create({
-  baseButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, height: 44, paddingHorizontal: 16 },
-  baseText: { fontWeight: '700', textAlign: 'center', textTransform: 'uppercase', letterSpacing: 1.5, fontSize: 12 },
-  disabled: { opacity: 0.5 },
+  baseButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    height: 44,
+    paddingHorizontal: 16,
+  },
+  baseText: {
+    fontWeight: '700',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    fontSize: 12,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
 });

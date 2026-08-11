@@ -11,7 +11,7 @@ export const REWARDS = [
 ];
 
 export const TIMER_OPTIONS = [
-  { id: '15', minutes: '15m', label: 'Smash & Grab', payout: 75 },
-  { id: '30', minutes: '30m', label: 'Standard Run', payout: 200 },
-  { id: '60', minutes: '60m', label: 'Deep Vault', payout: 500 },
+  { id: '1', minutes: '1m', label: 'Smash & Grab', payout: 75 },
+  { id: '15', minutes: '15m', label: 'Standard Run', payout: 200 },
+  { id: '30', minutes: '30m', label: 'Deep Vault', payout: 500 },
 ];

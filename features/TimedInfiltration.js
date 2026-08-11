@@ -32,7 +32,7 @@ export function TimedInfiltration({ onStartTimer, onCancelTimer, isTimerActive }
               style={[
                 styles.timerBox,
                 { backgroundColor: theme.cardBg, borderColor: theme.border, borderRadius: theme.radius.xl },
-                active && { borderColor: theme.gold, backgroundColor: 'rgba(226, 169, 58, 0.12)' },
+                active && { borderColor: theme.gold, backgroundColor: theme.goldBadgeBg },
                 isTimerActive && { opacity: 0.4 },
               ]}
               onPress={() => handleSelect(opt.id)}
@@ -61,7 +61,14 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
   sectionTitle: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 2 },
   timerGrid: { flexDirection: 'row', gap: 12 },
-  timerBox: { flex: 1, alignItems: 'center', gap: 4, borderWidth: 1, paddingVertical: 18, paddingHorizontal: 8 },
+  timerBox: { 
+    flex: 1, 
+    alignItems: 'center', 
+    gap: 4, 
+    borderWidth: 1, 
+    paddingVertical: 18, 
+    paddingHorizontal: 8,
+  },
   timerMinutes: { fontSize: 22, fontWeight: '700', fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif' },
   timerLabel: { fontSize: 9, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, textAlign: 'center' },
   abortBtn: { marginTop: 14, height: 44, borderWidth: 1, borderColor: '#E24953', backgroundColor: 'rgba(226, 73, 83, 0.15)', justifyContent: 'center', alignItems: 'center', width: '100%' },

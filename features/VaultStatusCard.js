@@ -1,13 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, Platform, Animated } from 'react-native';
 import Svg, { Circle, G, Defs, Filter, FeGaussianBlur, FeMerge, FeMergeNode } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
 
-import { BlurView } from 'expo-blur';
-
 import { useTheme } from '../context/ThemeContext';
 import { GlassCard } from '../components/GlassCard';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export function VaultStatusCard({
   active = 3,
@@ -16,9 +16,12 @@ export function VaultStatusCard({
   timerSeconds = 0,
   isUnlocked = false,
 }) {
-  const { theme } = useTheme();
+  const { isDarkMode, theme } = useTheme();
 
-  // Web Spec SVG Math: radius 78, strokeWidth 6, viewBox 0 0 180 180
+  // Animation value for the pulsing glow
+  const pulseAnim = useRef(new Animated.Value(0.12)).current;
+
+
   const radius = 78;
   const circumference = 2 * Math.PI * radius;
   const progress = active / total;
@@ -33,10 +36,32 @@ export function VaultStatusCard({
   const accentColor = isUnlocked ? theme.green : theme.gold;
   const iconName = isTimerActive ? 'clock' : isUnlocked ? 'unlock' : 'lock';
 
+
+  useEffect(() => {
+    // Create a continuous looping pulse animation
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 0.35, // Peak glow opacity
+          duration: 1500,
+          useNativeDriver: false, // SVG props typically require useNativeDriver: false
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 0.10, // Dimmer glow opacity
+          duration: 1500,
+          useNativeDriver: false,
+        }),
+      ])
+    );
+
+    animation.start();
+
+    return () => animation.stop();
+  }, [pulseAnim]);
+
   return (
     <View>
-
-    <GlassCard>
+      <GlassCard>
         <View style={styles.cardContent}>
           <Text
             style={[
@@ -51,12 +76,12 @@ export function VaultStatusCard({
               : 'VAULT LOCK STATUS'}
           </Text>
 
-          {/* 2. 180x180 SVG DIAL WITH NEON GLOW ARC */}
+          {/* SVG Dial with Neon Glow */}
           <View style={styles.dialWrapper}>
             <Svg width={180} height={180} viewBox="0 0 180 180">
               <Defs>
                 <Filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
-                  <FeGaussianBlur stdDeviation="4" result="coloredBlur" />
+                  <FeGaussianBlur stdDeviation="6" result="coloredBlur" />
                   <FeMerge>
                     <FeMergeNode in="coloredBlur" />
                     <FeMergeNode in="coloredBlur" />
@@ -66,69 +91,50 @@ export function VaultStatusCard({
               </Defs>
 
               <G rotation="-90" origin="90, 90">
-                {/* Static Background Track */}
-                <Circle
-                  cx="90"
-                  cy="90"
-                  r={radius}
-                  fill="none"
-                  stroke={theme.border}
-                  strokeWidth="6"
-                />
-
-                {/* Diffused Ambient Glow Halo Layer */}
-                <Circle
-                  cx="90"
-                  cy="90"
-                  r={radius}
-                  fill="none"
-                  stroke={accentColor}
-                  strokeWidth="12"
-                  opacity={0.25}
-                  strokeDasharray={[dash, circumference]}
-                  strokeLinecap="round"
-                />
-
-                {/* Primary Arc with SVG Filter Glow */}
-                <Circle
-                  cx="90"
-                  cy="90"
+                {/* Static / Subtle Ambient Glow Halo Layer */}
+                <AnimatedCircle
+                  cx="90" 
+                  cy="90" 
                   r={radius}
                   fill="none"
                   stroke={accentColor}
                   strokeWidth="6"
+                  opacity={pulseAnim} // <-- Bound to the animated value
                   strokeDasharray={[dash, circumference]}
                   strokeLinecap="round"
+                />
+
+                {/* Primary Arc with Animated Glow */}
+                <AnimatedCircle
+                  cx="90" cy="90" r={radius}
+                  fill="none"
+                  stroke={accentColor}
+                  strokeWidth="1.5"
+                  strokeDasharray={[dash, circumference]}
+                  strokeLinecap="round"
+                  opacity={pulseAnim + .25} 
                   filter="url(#goldGlow)"
                 />
               </G>
             </Svg>
 
-            {/* 3. VAULT DOOR WITH GRADIENT */}
+            {/* Vault Door with Gradient */}
             <LinearGradient
               colors={[theme.cardHeaderBg, theme.bg]}
               start={{ x: 0.5, y: 0 }}
               end={{ x: 0.5, y: 1 }}
               style={[
                 styles.doorOuter,
-                {
-                  borderColor: isUnlocked
-                    ? 'rgba(16, 185, 129, 0.25)'
-                    : 'rgba(226, 169, 58, 0.25)',
-                },
+                { borderWidth: isDarkMode ? 0 : 1},
+                { borderColor: isUnlocked ? 'rgba(16, 185, 129, 0.25)' : 'rgba(226, 169, 58, 0.25)' },
               ]}
             >
-              {/* Inner Lock Core */}
               <View
                 style={[
                   styles.doorInner,
                   {
-                    borderColor: isUnlocked
-                      ? 'rgba(16, 185, 129, 0.20)'
-                      : 'rgba(226, 169, 58, 0.20)',
-                    backgroundColor: isUnlocked
-                      ? 'rgba(16, 185, 129, 0.10)'
-                      : 'rgba(25, 28, 36, 0.60)',
+                    borderColor: isUnlocked ? 'rgba(16, 185, 129, 0.20)' : 'rgba(226, 169, 58, 0.20)',
+                    backgroundColor: isUnlocked ? 'rgba(16, 185, 129, 0.10)' : theme.cardBg,
                   },
                 ]}
               >
@@ -137,7 +143,7 @@ export function VaultStatusCard({
             </LinearGradient>
           </View>
 
-          {/* 4. SERIF NUMBERS & CAPTION */}
+          {/* Status Display & Numbers */}
           {isTimerActive ? (
             <View style={styles.statusDisplay}>
               <Text style={[styles.timerCountdownText, { color: theme.gold }]}>
@@ -178,13 +184,6 @@ export function VaultStatusCard({
 }
 
 const styles = StyleSheet.create({
-  vaultCard: {
-    position: 'relative',
-    overflow: 'hidden',
-    borderWidth: 1,
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-  },
   cardContent: {
     alignItems: 'center',
     position: 'relative',
@@ -198,8 +197,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 2.4,
   },
-
-  // Dial & Inner Circles
   dialWrapper: {
     position: 'relative',
     width: 180,
@@ -212,7 +209,6 @@ const styles = StyleSheet.create({
     width: 128,
     height: 128,
     borderRadius: 64,
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -224,8 +220,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  // Typography
   vaultNumbers: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -248,7 +242,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 2,
   },
-
   statusDisplay: {
     alignItems: 'center',
     marginTop: 16,
