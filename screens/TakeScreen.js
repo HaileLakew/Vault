@@ -9,7 +9,7 @@ export function TakeScreen({ balance, onClaim }) {
   const { theme } = useTheme();
 
   return (
-    <View style={[styles.takeView, { backgroundColor: theme.bg }]}>
+    <View style={[styles.takeView]}>
       <View style={styles.takeHeader}>
         <Text style={[styles.sectionTitle, { color: theme.textMuted }]}>
           THE TAKE
