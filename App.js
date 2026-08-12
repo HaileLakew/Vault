@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, PlayfairDisplay_600SemiBold } from '@expo-google-fonts/playfair-display';
 import { Feather } from '@expo/vector-icons';
@@ -61,6 +61,14 @@ function VaultAppContent() {
         style={StyleSheet.absoluteFillObject}
         pointerEvents="none"
       />
+
+              <View style={styles.watermarkContainer} pointerEvents="none">
+          <Image 
+            source={require('./assets/icon.png')} 
+            style={styles.watermarkImage} 
+            resizeMode="contain" 
+          />
+        </View>
 
         <ScrollView
           style={styles.mainScroll}
@@ -127,6 +135,16 @@ const styles = StyleSheet.create({
   container: { flex: 1, position: 'relative' },
   mainScroll: { flex: 1 },
   scrollContent: { paddingBottom: 24 },
+  watermarkContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.15, // Faint watermark so you can test the blur overlay
+  },
+  watermarkImage: {
+    width: 250,
+    height: 250,
+  },
   floatingThemeBtn: {
     position: 'absolute',
     bottom: 80,

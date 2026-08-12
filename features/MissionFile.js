@@ -42,7 +42,7 @@ export function MissionFile({ mission, index, onBypass, cleared }) {
 }
 
 const styles = StyleSheet.create({
-  missionItem: { borderWidth: 1, overflow: 'hidden' },
+  missionItem: { borderWidth: 1, overflow: 'hidden', marginVertical:10 },
   missionCleared: { opacity: 0.4 },
   missionTop: { flexDirection: 'row', alignItems: 'center', gap: 16, padding: 16 },
   missionIconBox: { width: 44, height: 44, borderWidth: 1, borderColor: 'rgba(226, 169, 58, 0.25)', justifyContent: 'center', alignItems: 'center' },
