@@ -1,6 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, Animated, Image } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import { TopBar } from '../components/TopBar';
 import { VaultStatusCard } from '../features/VaultStatusCard';
@@ -19,8 +20,17 @@ export function PlanScreen({
   onCancelTimer,
   onStartNfcScan,
 }) {
-  const { theme } = useTheme();
+  const { isDarkMode, theme } = useTheme();
   const isDark = theme.statusBarStyle === 'light-content';
+  const imageFadeAnim = useRef(new Animated.Value(0)).current;
+
+  const handleImageLoad = () => {
+    Animated.timing(imageFadeAnim, {
+      toValue: 0.05, // Your desired target opacity (or check isDarkMode if needed)
+      duration: 600, // Duration of the fade-in in milliseconds
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <View style={styles.planView}>
@@ -57,6 +67,25 @@ export function PlanScreen({
             },
           ]}
         >
+          <View style={[styles.watermarkContainer, theme.radius['xl']]} pointerEvents="none">
+              <Animated.Image  
+                source={require('../assets/Image3.jpg')} 
+                resizeMode="cover" 
+                onLoad={handleImageLoad}
+                style={[
+                  styles.watermarkImage, 
+                  theme.radius['xl'],
+                  { opacity: imageFadeAnim } 
+                ]} 
+              />
+
+              {/* Bottom Fade Gradient */}
+              <LinearGradient
+                colors={['transparent', isDarkMode ? '#121217' : '#F8FAFC']}
+                style={styles.fadeBottom}
+              />
+          </View>
+
           <View style={styles.missionList}>
             {MISSIONS.map((mission, i) => (
               <MissionFile key={mission.id} mission={mission} index={i} cleared={!!cleared[mission.id]} onBypass={onStartNfcScan} />
@@ -81,4 +110,16 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   missionList: { gap: 12 },
+    watermarkContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 0,
+    // overflow: 'hidden', // Required to clip the image to the border radius
+  },
+  watermarkImage: {
+    // top: '-10%',
+    // left: '-10%',
+    width: '100%',
+    height: '100%',
+    opacity: 0.15,
+  },
 });

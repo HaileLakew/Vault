@@ -1,6 +1,6 @@
 // components/GlassCard.js
 import React from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
+import { StyleSheet, View, Platform, Image } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
@@ -38,7 +38,7 @@ export function GlassCard({ children, style, intensity = 85 }) {
         colors={[
           isDarkMode
             ? 'rgba(255, 255, 255, 0.1)'
-            : 'rgba(255, 255, 255, 0.95)',
+            : 'rgba(255, 255, 255, 0.05)',
           isDarkMode
             ? 'rgba(255, 255, 255, 0.05)'
             : 'rgba(245, 242, 235, 0.60)',

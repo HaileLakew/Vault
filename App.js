@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, PlayfairDisplay_600SemiBold } from '@expo-google-fonts/playfair-display';
 import { Feather } from '@expo/vector-icons';
@@ -61,23 +61,6 @@ function VaultAppContent() {
           style={StyleSheet.absoluteFillObject}
           pointerEvents="none"
         />
-
-        <View style={styles.watermarkContainer} pointerEvents="none">
-          <Image 
-            source={isDarkMode ? require('./assets/Image3.jpg') : require('./assets/Image1.jpg')} 
-            resizeMode="cover" 
-            style={[
-              styles.watermarkImage, 
-              // Using objectPosition or adjusting top padding/alignment if needed
-            ]} 
-          />
-
-          {/* Bottom Fade Gradient */}
-          <LinearGradient
-            colors={['transparent', isDarkMode ? '#121217' : '#F8FAFC']}
-            style={styles.fadeBottom}
-          />
-        </View>
 
         <ScrollView
           style={styles.mainScroll}
@@ -144,17 +127,6 @@ const styles = StyleSheet.create({
   container: { flex: 1, position: 'relative' },
   mainScroll: { flex: 1 },
   scrollContent: { paddingBottom: 24 },
-  watermarkContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 0,
-    overflow: 'hidden', 
-  },
-  watermarkImage: {
-    width: '100%',
-    height: '100%',
-    transform: [{ translateY: '-20%' }],
-    opacity: 0.15,
-  },
   fadeTop: {
     position: 'absolute',
     top: 0,

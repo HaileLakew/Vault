@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Platform, Animated } from 'react-native';
+import { StyleSheet, Text, View, Platform, Animated, Image } from 'react-native';
 import Svg, { Circle, G, Defs, Filter, FeGaussianBlur, FeMerge, FeMergeNode } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Feather } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { GlassCard } from '../components/GlassCard';
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
 
 export function VaultStatusCard({
   active = 3,
@@ -18,9 +18,12 @@ export function VaultStatusCard({
 }) {
   const { isDarkMode, theme } = useTheme();
 
+  const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+
   // Animation value for the pulsing glow
   const pulseAnim = useRef(new Animated.Value(0.12)).current;
-
+  const imageFadeAnim = useRef(new Animated.Value(0)).current;
 
   const radius = 78;
   const circumference = 2 * Math.PI * radius;
@@ -36,6 +39,13 @@ export function VaultStatusCard({
   const accentColor = isUnlocked ? theme.green : theme.gold;
   const iconName = isTimerActive ? 'clock' : isUnlocked ? 'unlock' : 'lock';
 
+  const handleImageLoad = () => {
+    Animated.timing(imageFadeAnim, {
+      toValue: 0.15, // Your desired target opacity (or check isDarkMode if needed)
+      duration: 600, // Duration of the fade-in in milliseconds
+      useNativeDriver: true,
+    }).start();
+  };
 
   useEffect(() => {
     // Create a continuous looping pulse animation
@@ -59,9 +69,57 @@ export function VaultStatusCard({
     return () => animation.stop();
   }, [pulseAnim]);
 
+  useEffect(() => {
+    // Reset value to 0, then animate to 1, in a continuous loop
+    const rotationAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(rotateAnim, {
+          toValue: 1,
+          duration: 10000, // Duration for a full rotation (e.g. 20 seconds)
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotateAnim, {
+          toValue: 0,
+          duration: 0, // Instant reset back to 0
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    rotationAnimation.start();
+
+    return () => rotationAnimation.stop();
+  }, [rotateAnim]);
+
+  const spin = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
   return (
     <View>
       <GlassCard>
+        <View style={[styles.watermarkContainer, theme.radius['xl']]} pointerEvents="none">
+          <Animated.Image  
+            source={require('../assets/Image3.jpg')} 
+            resizeMode="cover" 
+            onLoad={handleImageLoad}
+            style={[
+              styles.watermarkImage, 
+              theme.radius['xl'],
+              { 
+                opacity: imageFadeAnim,
+                transform: [{ rotate: spin }] // <-- Apply slow rotation here
+              } 
+            ]} 
+          />
+
+          {/* Bottom Fade Gradient */}
+          <LinearGradient
+            colors={['transparent', isDarkMode ? '#121217' : '#F8FAFC']}
+            style={styles.fadeBottom}
+          />
+      </View>
         <View style={styles.cardContent}>
           <Text
             style={[
@@ -255,5 +313,17 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '900',
     letterSpacing: 2,
+  },
+  watermarkContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 0,
+    // overflow: 'hidden', // Required to clip the image to the border radius
+  },
+  watermarkImage: {
+    top: '-50%',
+    left: '-50%',
+    width: '195%',
+    height: '200%',
+    opacity: 0.15,
   },
 });
