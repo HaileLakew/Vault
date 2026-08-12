@@ -42,10 +42,11 @@ export function PlanScreen({
           <Text style={[styles.sectionTitle, { color: theme.textMuted }]}>MISSION BOARD</Text>
           <Text style={[styles.missionBoardSub, { color: theme.gold }]}>DAILY TARGETS</Text>
         </View>
+        
 
         {/* Frosted Glass Wrapper */}
         <BlurView
-          intensity={40}
+          intensity={60}
           tint={isDark ? 'dark' : 'light'}
           style={[
             styles.frostedWrapper,

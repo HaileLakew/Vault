@@ -6,10 +6,11 @@ import { Button } from '../components/Button';
 import { GoldBar } from '../components/GoldBadge';
 
 export function MissionFile({ mission, index, onBypass, cleared }) {
-  const { theme } = useTheme();
+  const { isDarkMode, theme } = useTheme();
 
   return (
     <View style={[styles.missionItem, { 
+      borderWidth:isDarkMode ? 0: 1,
       backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: theme.border, borderRadius: theme.radius.xl }, cleared && styles.missionCleared]}>
       <View style={styles.missionTop}>
         <View style={[styles.missionIconBox, { backgroundColor: theme.bg, borderRadius: theme.radius.md }]}>
@@ -42,7 +43,7 @@ export function MissionFile({ mission, index, onBypass, cleared }) {
 }
 
 const styles = StyleSheet.create({
-  missionItem: { borderWidth: 1, overflow: 'hidden', marginVertical:10 },
+  missionItem: { overflow: 'hidden', marginVertical:10 },
   missionCleared: { opacity: 0.4 },
   missionTop: { flexDirection: 'row', alignItems: 'center', gap: 16, padding: 16 },
   missionIconBox: { width: 44, height: 44, borderWidth: 1, borderColor: 'rgba(226, 169, 58, 0.25)', justifyContent: 'center', alignItems: 'center' },

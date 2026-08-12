@@ -53,20 +53,29 @@ function VaultAppContent() {
     <SafeAreaView style={[styles.safeArea]} edges={['top', 'left', 'right']}>
       <StatusBar barStyle={theme.statusBarStyle} />
       <View style={[styles.container]}>
-      <LinearGradient
-        colors={theme.backgroundGradient}
-        locations={[0, 0.245, 1]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={StyleSheet.absoluteFillObject}
-        pointerEvents="none"
-      />
+        <LinearGradient
+          colors={theme.backgroundGradient}
+          locations={[0, 0.245, 1]}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={StyleSheet.absoluteFillObject}
+          pointerEvents="none"
+        />
 
-              <View style={styles.watermarkContainer} pointerEvents="none">
+        <View style={styles.watermarkContainer} pointerEvents="none">
           <Image 
-            source={require('./assets/icon.png')} 
-            style={styles.watermarkImage} 
-            resizeMode="contain" 
+            source={isDarkMode ? require('./assets/Image3.jpg') : require('./assets/Image1.jpg')} 
+            resizeMode="cover" 
+            style={[
+              styles.watermarkImage, 
+              // Using objectPosition or adjusting top padding/alignment if needed
+            ]} 
+          />
+
+          {/* Bottom Fade Gradient */}
+          <LinearGradient
+            colors={['transparent', isDarkMode ? '#121217' : '#F8FAFC']}
+            style={styles.fadeBottom}
           />
         </View>
 
@@ -137,13 +146,28 @@ const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 24 },
   watermarkContainer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 0.15, // Faint watermark so you can test the blur overlay
+    zIndex: 0,
+    overflow: 'hidden', 
   },
   watermarkImage: {
-    width: 250,
-    height: 250,
+    width: '100%',
+    height: '100%',
+    transform: [{ translateY: '-20%' }],
+    opacity: 0.15,
+  },
+  fadeTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 120,
+  },
+  fadeBottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 120,
   },
   floatingThemeBtn: {
     position: 'absolute',
