@@ -5,6 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '../context/ThemeContext';
 
+//TODO: Middle button to unlock "Master Mode" to edit parameters
+
 export function BottomNav({ active, onChange }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();

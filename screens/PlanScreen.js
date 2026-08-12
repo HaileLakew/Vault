@@ -45,6 +45,8 @@ export function PlanScreen({
         />
       </View>
       
+      {/* // TODO: Summary of accomplishments */}
+
       <TimedInfiltration onStartTimer={onStartTimer} onCancelTimer={onCancelTimer} isTimerActive={isTimerActive} />
       
       <View style={styles.sectionContainer}>

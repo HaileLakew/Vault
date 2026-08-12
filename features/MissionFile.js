@@ -43,7 +43,16 @@ export function MissionFile({ mission, index, onBypass, cleared }) {
 }
 
 const styles = StyleSheet.create({
-  missionItem: { overflow: 'hidden', marginVertical:10 },
+    missionItem: { 
+    overflow: 'hidden', 
+    marginVertical: 10,
+    // Add shadow styling here:
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8, // Android shadow depth
+  },
   missionCleared: { opacity: 0.4 },
   missionTop: { flexDirection: 'row', alignItems: 'center', gap: 16, padding: 16 },
   missionIconBox: { width: 44, height: 44, borderWidth: 1, borderColor: 'rgba(226, 169, 58, 0.25)', justifyContent: 'center', alignItems: 'center' },

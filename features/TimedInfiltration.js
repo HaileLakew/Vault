@@ -26,20 +26,27 @@ export function TimedInfiltration({ onStartTimer, onCancelTimer, isTimerActive }
         {TIMER_OPTIONS.map((opt) => {
           const active = selected === opt.id;
           return (
-            <TouchableOpacity
-              key={opt.id}
-              disabled={isTimerActive}
+            <View 
+              key={opt.id} 
               style={[
-                styles.timerBox,
-                { backgroundColor: theme.cardBg, borderColor: theme.border, borderRadius: theme.radius.xl },
-                active && { borderColor: theme.gold, backgroundColor: theme.goldBadgeBg },
-                isTimerActive && { opacity: 0.4 },
+                styles.timerShadowWrapper, 
+                { borderRadius: theme.radius.xl },
+                isTimerActive && { opacity: 0.4 }
               ]}
-              onPress={() => handleSelect(opt.id)}
             >
-              <Text style={[styles.timerMinutes, { color: active ? theme.gold : theme.textPrimary }]}>{opt.minutes}</Text>
-              <Text style={[styles.timerLabel, { color: active ? theme.gold : theme.textMuted }]}>{opt.label}</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                disabled={isTimerActive}
+                style={[
+                  styles.timerBox,
+                  { backgroundColor: theme.cardBg, borderColor: theme.border, borderRadius: theme.radius.xl },
+                  active && { borderColor: theme.gold, backgroundColor: theme.goldBadgeBg },
+                ]}
+                onPress={() => handleSelect(opt.id)}
+              >
+                <Text style={[styles.timerMinutes, { color: active ? theme.gold : theme.textPrimary }]}>{opt.minutes}</Text>
+                <Text style={[styles.timerLabel, { color: active ? theme.gold : theme.textMuted }]}>{opt.label}</Text>
+              </TouchableOpacity>
+            </View>
           );
         })}
       </View>
@@ -61,6 +68,17 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
   sectionTitle: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 2 },
   timerGrid: { flexDirection: 'row', gap: 12 },
+  
+  // Dedicated outer wrapper for iOS & Android shadows
+  timerShadowWrapper: {
+    flex: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+
   timerBox: { 
     flex: 1, 
     alignItems: 'center', 
@@ -68,6 +86,7 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     paddingVertical: 18, 
     paddingHorizontal: 8,
+    overflow: 'hidden',
   },
   timerMinutes: { fontSize: 22, fontWeight: '700', fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif' },
   timerLabel: { fontSize: 9, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, textAlign: 'center' },

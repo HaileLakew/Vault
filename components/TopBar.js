@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { GoldBadge } from './GoldBadge';
@@ -14,15 +14,12 @@ export function TopBar({ balance }) {
         <View style={styles.gridDotWrapper}>
           <View style={[styles.gridDot, { backgroundColor: theme.gold }]} />
         </View>
-        <Feather name="shield" size={14} color={theme.gold} />
+        <Feather name="shield" size={16} color={theme.gold} />
         <Text
-          style={[styles.gridText, { color: theme.textMuted }]}
+          style={[styles.gridText, { color: theme.textPrimary }]}
           numberOfLines={1}
         >
-          SECURITY GRID:{' '}
-          <Text style={{ color: theme.textPrimary, fontWeight: '700' }}>
-            ACTIVE
-          </Text>
+          VAULT
         </Text>
       </View>
 
@@ -45,7 +42,7 @@ const styles = StyleSheet.create({
   gridStatus: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     flexShrink: 1,
   },
   gridDotWrapper: {
@@ -60,9 +57,10 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   gridText: {
-    fontSize: 10,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
     textTransform: 'uppercase',
-    letterSpacing: 1.2,
+    letterSpacing: 2,
   },
 });
