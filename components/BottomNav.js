@@ -2,12 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '../context/ThemeContext';
 
-//TODO: Middle button to unlock "Master Mode" to edit parameters
-
-export function BottomNav({ active, onChange }) {
+export function BottomNav({ active, onChange, onIslandPress }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
 
@@ -32,80 +31,146 @@ export function BottomNav({ active, onChange }) {
   };
 
   return (
-    <View
-      style={[
-        styles.navContainer,
-        {
-          backgroundColor: theme.navBg,
-          borderTopColor: theme.border,
-          paddingBottom: Math.max(insets?.bottom || 0, 12),
-        },
-      ]}
-    >
-      {TABS.map((tab) => {
-        const isActive = active === tab.id;
-        const activeColor = isActive ? theme.gold : theme.textMuted;
+    <View style={[styles.container, { paddingBottom: Math.max(insets?.bottom || 0, 12) }]}>
+      {/* SVG Background with Center Concave Notch */}
+      <View style={[StyleSheet.absoluteFillObject, { top: 0 }]}>
+        <Svg height="100%" width="100%" viewBox="0 0 375 72" preserveAspectRatio="none">
+          <Path
+            d="M0,0 
+               L132,0 
+               C148,0 156,22 187,22 
+               C218,22 226,0 243,0 
+               L375,0 
+               L375,72 
+               L0,72 
+               Z"
+            fill={theme.navBg}
+            stroke={theme.border}
+            strokeWidth="1"
+          />
+        </Svg>
+      </View>
 
-        return (
+      {/* Tabs and Island Content */}
+      <View style={styles.navContent}>
+        {/* Left Tab */}
+        {renderTab(TABS[0], active === TABS[0].id, handlePress, theme)}
+
+        {/* Central Island Button Container */}
+        <View style={styles.islandContainer}>
           <TouchableOpacity
-            key={tab.id}
-            activeOpacity={0.7}
-            onPress={() => handlePress(tab.id)}
-            style={styles.tabButton}
+            activeOpacity={0.8}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onIslandPress?.();
+            }}
+            style={[
+              styles.islandButton,
+              { backgroundColor: theme.cardBg, borderColor: theme.border, shadowColor: theme.gold },
+            ]}
           >
-            {/* Glowing Indicator Stack */}
-            {isActive && (
-              <View style={styles.indicatorWrapper}>
-                {/* Soft Diffused Halo Layer */}
-                <View
-                  style={[
-                    styles.glowHalo,
-                    {
-                      backgroundColor: theme.gold,
-                      boxShadow: `0px 0px 14px 4px ${theme.gold}`,
-                      shadowColor: theme.gold,
-                    },
-                  ]}
-                />
-                {/* Sharp Core Bar */}
-                <View
-                  style={[
-                    styles.activeIndicator,
-                    { backgroundColor: theme.gold },
-                  ]}
-                />
-              </View>
-            )}
-
-            {tab.renderIcon(activeColor)}
-
-            <Text style={[styles.tabLabel, { color: activeColor }]}>
-              {tab.label}
-            </Text>
+            <Feather name="shield" size={18} color={theme.gold} />
           </TouchableOpacity>
-        );
-      })}
+        </View>
+
+        {/* Right Tab */}
+        {renderTab(TABS[1], active === TABS[1].id, handlePress, theme)}
+      </View>
     </View>
   );
 }
 
+function renderTab(tab, isActive, handlePress, theme) {
+  const activeColor = isActive ? theme.gold : theme.textMuted;
+
+  return (
+    <TouchableOpacity
+      key={tab.id}
+      activeOpacity={0.7}
+      onPress={() => handlePress(tab.id)}
+      style={styles.tabButton}
+    >
+      {isActive && (
+        <View style={styles.indicatorWrapper}>
+          <View
+            style={[
+              styles.glowHalo,
+              {
+                backgroundColor: theme.gold,
+                boxShadow: `0px 0px 14px 4px ${theme.gold}`,
+                shadowColor: theme.gold,
+              },
+            ]}
+          />
+          <View
+            style={[
+              styles.activeIndicator,
+              { backgroundColor: theme.gold },
+            ]}
+          />
+        </View>
+      )}
+
+      {tab.renderIcon(activeColor)}
+
+      <Text style={[styles.tabLabel, { color: activeColor }]}>
+        {tab.label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
-  navContainer: {
+  container: {
+    position: 'relative',
+    height: 64,
+    justifyContent: 'flex-end',
+    overflow: 'visible',
+  },
+  navContent: {
+    flex: 1,
     flexDirection: 'row',
-    borderTopWidth: 1,
+    alignItems: 'center',
     paddingTop: 8,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 6,
-    gap: 4,
+    paddingVertical: 4,
+    gap: 2,
     position: 'relative',
+  },
+  islandContainer: {
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 99,
+    overflow: 'visible',
+  },
+  islandButton: {
+    position: 'absolute',
+    top: -35,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+    // Explicit background required for shadows
+    backgroundColor: '#1a1a1a', // or theme.cardBg
+
+    // Shadow / Elevation
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    elevation: 16,
   },
   indicatorWrapper: {
     position: 'absolute',
-    top: -8,
+    top: -4,
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
@@ -117,13 +182,9 @@ const styles = StyleSheet.create({
     height: 4,
     borderRadius: 2,
     opacity: 0.65,
-
-    // iOS Native
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
     shadowRadius: 10,
-
-    // Android Native
     elevation: 12,
   },
   activeIndicator: {

@@ -9,7 +9,7 @@ export function GlassCard({ children, style, intensity = 50 }) {
   const { theme, isDarkMode } = useTheme();
 
   return (
-    <View style={styles.shadowContainer}>
+    <View style={[styles.shadowContainer, {borderRadius: theme.radius['xl']}]}>
       <View
         style={[
           styles.paperCard,
