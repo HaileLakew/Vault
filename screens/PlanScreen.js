@@ -107,7 +107,7 @@ export function PlanScreen({
 const styles = StyleSheet.create({
   planView: { flex: 1, gap: 24 },
   vaultWrapper: { paddingHorizontal: 24 },
-  sectionContainer: { paddingHorizontal: 24, paddingVertical: 25 },
+  sectionContainer: { paddingHorizontal: 24, paddingVertical: 15 },
   sectionTitle: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 2.4 },
   missionBoardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   missionBoardSub: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1.8 },

@@ -10,6 +10,9 @@ export function BottomNav({ active, onChange, onIslandPress }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
 
+  const bottomInset = insets?.bottom || 0;
+  const navHeight = 64 + bottomInset;
+
   const TABS = [
     {
       id: 'plan',
@@ -31,9 +34,17 @@ export function BottomNav({ active, onChange, onIslandPress }) {
   };
 
   return (
-    <View style={[styles.container, { paddingBottom: Math.max(insets?.bottom || 0, 12) }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: navHeight,
+          paddingBottom: Math.max(bottomInset, 12),
+        },
+      ]}
+    >
       {/* SVG Background with Center Concave Notch */}
-      <View style={[StyleSheet.absoluteFillObject, { top: 0 }]}>
+      <View style={StyleSheet.absoluteFillObject}>
         <Svg height="100%" width="100%" viewBox="0 0 375 72" preserveAspectRatio="none">
           <Path
             d="M0,0 
@@ -70,11 +81,11 @@ export function BottomNav({ active, onChange, onIslandPress }) {
                 backgroundColor: theme.cardBg, 
                 borderColor: theme.border, 
                 shadowColor: '#000',
-                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.35), 0px 0px 8px rgba(207, 157, 120, 0.2)',
+                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25), 0px 0px 8px rgba(207, 157, 120, 0.8)',
               },
             ]}
           >
-            <Feather name="shield" size={18} color={theme.gold} />
+            <Feather name="shield" size={25} color={theme.gold} />
           </TouchableOpacity>
         </View>
 
@@ -131,7 +142,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 64,
     justifyContent: 'flex-end',
     overflow: 'visible',
     backgroundColor: 'transparent',
@@ -159,14 +169,18 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   islandButton: {
-  position: 'absolute',
-  top: -35,
-  width: 60,
-  height: 60,
-  borderRadius: 30,
-  borderWidth: 1,
-  alignItems: 'center',
-  justifyContent: 'center',
+    position: 'absolute',
+    top: -55,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // shadowOffset: { width: 0, height: 10 },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 5,
+    elevation: 4,
   },
   indicatorWrapper: {
     position: 'absolute',
