@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   shadowContainer: {
     // Soft shadow to elevate the paper surface off the background
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 16 }, // Higher vertical offset
+    shadowOffset: { width: 0, height: 10 }, // Higher vertical offset
     shadowOpacity: 0.45,                 // Darker/stronger shadow
     shadowRadius: 24,                    // Wider blur spread
     elevation: 16, 

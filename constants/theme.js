@@ -52,7 +52,7 @@ export const getTheme = (isDark = true) => ({
   green: '#10B981',
 
   // Navigation & Blur Overlays
-  navBg: isDark ? 'rgba(19, 23, 34, 0.90)' : 'rgba(255, 255, 255, 0.92)',
+  navBg: isDark ? 'rgba(19, 23, 34)' : 'rgba(255, 255, 255)',
   statusBarStyle: isDark ? 'light-content' : 'dark-content',
 
   radius,

@@ -66,7 +66,12 @@ export function BottomNav({ active, onChange, onIslandPress }) {
             }}
             style={[
               styles.islandButton,
-              { backgroundColor: theme.cardBg, borderColor: theme.border, shadowColor: theme.gold },
+              { 
+                backgroundColor: theme.cardBg, 
+                borderColor: theme.border, 
+                shadowColor: '#000',
+                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.35), 0px 0px 8px rgba(207, 157, 120, 0.2)',
+              },
             ]}
           >
             <Feather name="shield" size={18} color={theme.gold} />
@@ -122,10 +127,15 @@ function renderTab(tab, isActive, handlePress, theme) {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     height: 64,
     justifyContent: 'flex-end',
     overflow: 'visible',
+    backgroundColor: 'transparent',
+    zIndex: 100,
   },
   navContent: {
     flex: 1,
@@ -149,24 +159,14 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   islandButton: {
-    position: 'absolute',
-    top: -35,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    
-    // Explicit background required for shadows
-    backgroundColor: '#1a1a1a', // or theme.cardBg
-
-    // Shadow / Elevation
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    elevation: 16,
+  position: 'absolute',
+  top: -35,
+  width: 60,
+  height: 60,
+  borderRadius: 30,
+  borderWidth: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
   },
   indicatorWrapper: {
     position: 'absolute',
