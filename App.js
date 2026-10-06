@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, StatusBar, Alert, TouchableOpacity, Modal, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, PlayfairDisplay_600SemiBold } from '@expo-google-fonts/playfair-display';
 import { Feather } from '@expo/vector-icons';
@@ -19,6 +19,7 @@ function VaultAppContent() {
   const { theme, isDarkMode, toggleTheme } = useTheme();
   const [tab, setTab] = useState('plan');
   const [scanningQuest, setScanningQuest] = useState(null);
+  const [isIslandModalVisible, setIsIslandModalVisible] = useState(false);
 
   const { balance, setBalance, cleared, setCleared } = useVaultStorage(350);
 
@@ -96,10 +97,37 @@ function VaultAppContent() {
           <Feather name={isDarkMode ? 'sun' : 'moon'} size={18} color={theme.gold} />
         </TouchableOpacity>
 
-        <BottomNav active={tab} onChange={setTab} />
+        <BottomNav 
+          active={tab} 
+          onChange={setTab} 
+          onIslandPress={() => setIsIslandModalVisible(true)} 
+        />
       </View>
 
       <NfcModal scanningQuest={scanningQuest} onClose={() => setScanningQuest(null)} />
+
+      {/* CENTRAL ISLAND MODAL */}
+      <Modal
+        visible={isIslandModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsIslandModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
+            <Text style={[styles.modalTitle, { color: theme.gold }]}>VAULT CONTROL</Text>
+            <Text style={[styles.modalText, { color: theme.textPrimary }]}>
+              Central security nexus active. All perimeter systems operational.
+            </Text>
+            <TouchableOpacity
+              onPress={() => setIsIslandModalVisible(false)}
+              style={[styles.closeBtn, { backgroundColor: theme.gold }]}
+            >
+              <Text style={{ color: theme.goldForeground, fontWeight: '600' }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -126,7 +154,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1 },
   container: { flex: 1, position: 'relative' },
   mainScroll: { flex: 1 },
-  scrollContent: { paddingBottom: 24 },
+  scrollContent: { paddingBottom: 100 },
   fadeTop: {
     position: 'absolute',
     top: 0,
@@ -143,7 +171,7 @@ const styles = StyleSheet.create({
   },
   floatingThemeBtn: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 90,
     right: 20,
     width: 44,
     height: 44,
@@ -157,5 +185,44 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 6,
     elevation: 6,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  modalContent: {
+    width: '100%',
+    maxWidth: 320,
+    padding: 24,
+    borderRadius: 16,
+    borderWidth: 1,
+    alignItems: 'center',
+    gap: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 16,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 2,
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  closeBtn: {
+    marginTop: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });
